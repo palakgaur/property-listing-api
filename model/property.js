@@ -10,16 +10,16 @@ const propertySchema = new Schema({
     description: {
       type: String,
       required: true
-  },
-  agentId: {
-    type: String,
-    required: true
-},
+    },
+    agentId: {
+      type: Number,
+      required: true
+    },
     address: {
-        type: String,
-        required: true,
-        unique: true
-      },
+      type: String,
+      required: true,
+      unique: true
+    },
       city: {
         type: String,
         required: true
@@ -37,7 +37,7 @@ const propertySchema = new Schema({
         required: true
       },
       price: {
-        type: String,
+        type: Number,
         required: true
       },
       img: {

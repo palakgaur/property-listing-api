@@ -3,24 +3,25 @@ import mongoose from 'mongoose';
 import { User } from './model/user.js';
 import { Property } from './model/property.js';
 import jwt from 'jsonwebtoken';
-const secretKey="secretKey";
+import { secretKey } from 'dotenv';
 const app = express()
 
 app.use(express.json());
 
-app.post("/api/user/login", (req, res) => {
-    const user = {
-      email: "palak@gmail.com",
-      password: "qwerty"
-    }
-    jwt.sign({ user }, secretKey, { expiresIn: '300s' }, (err, token) => {
-      res.json({
-        token
-      })
-    })
-})
+app.post("/api/user/login", async(req, res) => {
+    const {email, password} = req.body;
 
-app.post("api/user/profile", verifyToken, (req, res) => {
+    const user = await User.findOne({email});
+    if(!user) return res.status(404).json({message: "User not found"});
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if(!isMatch) return res.status(400).json({message:"Invalid credentials"});
+    
+    const token = jwt.sign({ userId: user.userId }, secretKey, { expiresIn: '300s' });
+      res.json({token});
+});
+
+app.post("/api/user/profile", verifyToken, (req, res) => {
   jwt.verify(req.token, secretKey, (err, authData) => {
     if (err) {
       res.send({ result: "invalid token" })

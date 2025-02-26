@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 import { User } from './model/user.js';
 import { Property } from './model/property.js';
 import jwt from 'jsonwebtoken';
-import { secretKey } from 'dotenv';
+import { secretKey } from './config.js';
+
+console.log(secretKey);
 const app = express()
 
 app.use(express.json());
